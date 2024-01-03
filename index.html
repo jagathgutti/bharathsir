@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cheering for Bharath Sir</title>
+    <script type="module">
+        async function loadImage() {
+            const response = await fetch('Sir.png');
+            const blob = await response.blob();
+
+            const image = new Image();
+            image.src = URL.createObjectURL(blob);
+
+            image.onload = function () {
+                const canvas = document.createElement('canvas');
+                canvas.width = 220; //width
+                canvas.height = 220; //height
+                const ctx = canvas.getContext('2d');
+                ctx.canvas.setAttribute('willReadFrequently', 'true');
+                ctx.drawImage(image, 0, 0, 220, 220); //width,height change
+
+                const asciiChars = "@%#*+=-:. ";
+                let asciiArt = '';
+
+                for (let y = 0; y < 220; y += 5) {//width change
+                    for (let x = 0; x < 220; x += 2) {//height change
+
+                        const pixel = ctx.getImageData(x, y, 1, 1).data;
+                        const grayscale = (pixel[0] + pixel[1] + pixel[2]) / 3;
+                        const asciiIndex = Math.floor((grayscale / 255) * (asciiChars.length - 1));
+                        asciiArt += asciiChars[asciiIndex];
+                    }
+                    asciiArt += '\n';
+                }
+
+                document.getElementById('asciiArt').innerText = asciiArt;
+            };
+        }
+
+        window.onload = loadImage;
+    </script>
+</head>
+
+<body>
+    <div id="asciiArt" style="font-family: monospace; white-space: pre; 
+    color: #0F2027;
+    "></div>
+</body>
+
+</html>
