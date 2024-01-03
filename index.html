@@ -5,9 +5,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cheering for Bharath Sir</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-image: url('D:/BOBBY/project/class/clg.jpg'); /* Update the image path */
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #fff;
+            font-size: 2em;
+        }
+        
+        p {
+            color: #fff;
+        }
+        
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        canvas {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+    </style>
+
     <script type="module">
-        async function loadImage() {
-            const response = await fetch('Sir.png');
+        async function loadImage(width, height) {
+            const response = await fetch('./Sir.png');
             const blob = await response.blob();
 
             const image = new Image();
@@ -15,18 +66,17 @@
 
             image.onload = function () {
                 const canvas = document.createElement('canvas');
-                canvas.width = 220; //width
-                canvas.height = 220; //height
+                canvas.width = width;
+                canvas.height = height;
                 const ctx = canvas.getContext('2d');
                 ctx.canvas.setAttribute('willReadFrequently', 'true');
-                ctx.drawImage(image, 0, 0, 220, 220); //width,height change
+                ctx.drawImage(image, 0, 0, width, height);
 
                 const asciiChars = "@%#*+=-:. ";
                 let asciiArt = '';
 
-                for (let y = 0; y < 220; y += 5) {//width change
-                    for (let x = 0; x < 220; x += 2) {//height change
-
+                for (let y = 0; y < height; y += 5) {
+                    for (let x = 0; x < width; x += 2) {
                         const pixel = ctx.getImageData(x, y, 1, 1).data;
                         const grayscale = (pixel[0] + pixel[1] + pixel[2]) / 3;
                         const asciiIndex = Math.floor((grayscale / 255) * (asciiChars.length - 1));
@@ -39,14 +89,34 @@
             };
         }
 
-        window.onload = loadImage;
+        window.onload = function () {
+            // Set the width and height to 220
+            const initialWidth = 220;
+            const initialHeight = 220;
+
+            // Create a button similar to the existing one
+            const sendCheersButton = document.createElement('button');
+            sendCheersButton.innerText = 'Send Cheers!';
+            sendCheersButton.addEventListener('click', function () {
+                loadImage(initialWidth, initialHeight);
+            });
+
+
+            // Append the button to the body
+            document.body.appendChild(sendCheersButton);
+        }
     </script>
 </head>
 
 <body>
-    <div id="asciiArt" style="font-family: monospace; white-space: pre; 
-    color: #0F2027;
-    "></div>
+    <div class="container">
+        <h1 style="color: grey;">Cheering for Bharath Sir!</h1>
+        <p style="color: grey;" id="cheerMessage">Congratulations Sir </p>
+        
+        <!-- The dynamically created button will be appended here -->
+    </div>
+
+    <div id="asciiArt" style="font-family: monospace; white-space: pre;"></div>
 </body>
 
 </html>
